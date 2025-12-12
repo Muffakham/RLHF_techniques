@@ -18,6 +18,8 @@ This project implements a reward model using a pre-trained transformer model (`m
    `.\venv\Scripts\activate` (on Windows)
 3. Install the required packages:
    `pip install -r requirements.txt`
+4. Create a `dataset` folder.
+5. Add the dataset as a JSONL file in the dataset folder
 
 ## Configuration
 All training parameters are defined in `config.py`, including `MODEL_ID`, `DEVICE`, `LEARNING_RATE`, `EPOCHS`, `BATCH_SIZE`, `MAX_LENGTH`, and `MODEL_SAVE_PATH`.
@@ -34,8 +36,20 @@ The trained model will be saved to the path specified in `config.MODEL_SAVE_PATH
 ## Model Details
 - **Base Model**: `microsoft/deberta-v3-small` (configured in `config.py`)
 - **Loss Function**: Bradley-Terry loss
-- **Optimizer**: AdamW
-- **Learning Rate**: 5e-5 (configured in `config.py`)
-- **Epochs**: 3 (configured in `config.py`)
-- **Batch Size**: 10 (configured in `config.py`)
-- **Max Length**: 128 (configured in `config.py`)
+
+The model is trained on the selected and rejected answer pairs.
+The loss function used is the bradley terry loss function.
+
+## Bradley terry loss function
+
+-    The log probabilities of the each sequence (choose and selected are calucualted).
+-    Since every toke has its log prob, the net prob of the entire sequence is calcuated as the meann of all the tokens in a sequence.
+-       loss = -F.logsigmoid(chosen_rewards - rejected_rewards).mean()
+-    It first caulates the difference between the log probabilities of the choose and the reference options.
+-   Second it calculates the sigmoid of the difference.
+-   Third it calculates the Negative log.
+
+-     Hence it calcuates the negative log likehood of difference between the choosen and the selected log probs.
+-   The aim here is to ***maximize*** the difference
+
+
