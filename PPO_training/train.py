@@ -17,27 +17,7 @@ def load_reward_model():
     if reward_tokenizer.pad_token is None:
         reward_tokenizer.pad_token = reward_tokenizer.eos_token
     
-    # Instantiate the RewardModel architecture
-    # Assuming reward model architecture matches SequenceClassification for now, 
-    # but strictly speaking the notebook used a simpler load logic.
-    # The notebook did: loaded_reward_model = RewardModel(REWARD_MODEL_ID)
-    # But RewardModel class definition was NOT found in the extracted code of PPO.ipynb?
-    # Ah, I need to check if RewardModel class was defined in the notebook or imported.
-    # Looking at the notebook extraction, the RewardModel class definition seems missing in the first cell shown?
-    # Let's assume for now it is AutoModelForSequenceClassification or similar.
-    # If the user supplied a custom class, it should have been in the notebook. 
-    # Let's assume standard AutoModelForSequenceClassification for now as fallback, 
-    # checking the extraction again...
-    # Step 22 output: line 9 `loaded_reward_model = RewardModel(REWARD_MODEL_ID)`
-    # It seems `RewardModel` is a custom class.
-    # I should verify where `RewardModel` comes from. 
-    # Since I cannot see the definition in the extracted code (maybe it was in a cell I missed or imported?),
-    # I will attempt to define a wrapper or use AutoModelForSequenceClassification.
-    # Wait, the extraction in Step 22 shows `from transformers import ...` but no `class RewardModel`.
-    # It might have been defined in a previous cell or imported from a local file.
-    # Given the context of `reward_model_training/`, it might be there.
-    # For now, I will use AutoModelForSequenceClassification as a reasonable default,
-    # but I will add a TODO.
+    
     
     try:
         reward_model = AutoModelForSequenceClassification.from_pretrained(REWARD_MODEL_ID, num_labels=1)
